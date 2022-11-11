@@ -1,0 +1,324 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000182  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000002  00800060  00000182  00000216  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000003  00800062  00800062  00000218  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000218  2**0
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000038  00000000  00000000  00000248  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000013a  00000000  00000000  00000280  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000000b2  00000000  00000000  000003ba  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000010c  00000000  00000000  0000046c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000ac  00000000  00000000  00000578  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000001a1  00000000  00000000  00000624  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000107  00000000  00000000  000007c5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000028  00000000  00000000  000008cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	43 c0       	rjmp	.+134    	; 0x8a <__vector_1>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	74 c0       	rjmp	.+232    	; 0xf0 <__vector_3>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e2 e8       	ldi	r30, 0x82	; 130
+  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	a2 36       	cpi	r26, 0x62	; 98
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+
+00000048 <__do_clear_bss>:
+  48:	20 e0       	ldi	r18, 0x00	; 0
+  4a:	a2 e6       	ldi	r26, 0x62	; 98
+  4c:	b0 e0       	ldi	r27, 0x00	; 0
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a5 36       	cpi	r26, 0x65	; 101
+  54:	b2 07       	cpc	r27, r18
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	76 d0       	rcall	.+236    	; 0x146 <main>
+  5a:	91 c0       	rjmp	.+290    	; 0x17e <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <collect_a_bit>:
+	
+	
+// 0000 1111
+//   0000 00xx     00xx xxxx
+
+   b1_PORTC = (PINC);
+  5e:	93 b3       	in	r25, 0x13	; 19
+   b1_PORTC &=~ (1<<6); 
+   b1_PORTC &=~ (1<<7); 
+  60:	9f 73       	andi	r25, 0x3F	; 63
+  62:	90 93 64 00 	sts	0x0064, r25
+   b2_PORTD  = (PIND>>6);
+  66:	80 b3       	in	r24, 0x10	; 16
+  68:	82 95       	swap	r24
+  6a:	86 95       	lsr	r24
+  6c:	86 95       	lsr	r24
+  6e:	83 70       	andi	r24, 0x03	; 3
+  70:	80 93 63 00 	sts	0x0063, r24
+   b2_PORTD  = (PIND<<6);
+  74:	80 b3       	in	r24, 0x10	; 16
+  76:	82 95       	swap	r24
+  78:	88 0f       	add	r24, r24
+  7a:	88 0f       	add	r24, r24
+  7c:	80 7c       	andi	r24, 0xC0	; 192
+  7e:	80 93 63 00 	sts	0x0063, r24
+// 	b1_PORTC  = (PINC<<2);
+// 	b2_PORTD  = (PIND<<6);
+// 	b2_PORTD  = (b2_PORTD>>6);
+  	b1_PORTC |= b2_PORTD;
+  82:	89 2b       	or	r24, r25
+  84:	80 93 64 00 	sts	0x0064, r24
+	return b1_PORTC;
+}
+  88:	08 95       	ret
+
+0000008a <__vector_1>:
+
+unsigned char semi_slou = 0;			   // 245 max min 116 устанавливает задержку семистра
+unsigned char CONTROLL_CLOSE = 1;          // первое или второе страбатывание таймера семистра
+
+ISR(INT0_vect)
+{
+  8a:	1f 92       	push	r1
+  8c:	0f 92       	push	r0
+  8e:	0f b6       	in	r0, 0x3f	; 63
+  90:	0f 92       	push	r0
+  92:	11 24       	eor	r1, r1
+  94:	2f 93       	push	r18
+  96:	3f 93       	push	r19
+  98:	4f 93       	push	r20
+  9a:	5f 93       	push	r21
+  9c:	6f 93       	push	r22
+  9e:	7f 93       	push	r23
+  a0:	8f 93       	push	r24
+  a2:	9f 93       	push	r25
+  a4:	af 93       	push	r26
+  a6:	bf 93       	push	r27
+  a8:	ef 93       	push	r30
+  aa:	ff 93       	push	r31
+ semi_slou = collect_a_bit(); 
+  ac:	d8 df       	rcall	.-80     	; 0x5e <collect_a_bit>
+  ae:	80 93 62 00 	sts	0x0062, r24
+ PORTB = semi_slou;
+  b2:	88 bb       	out	0x18, r24	; 24
+ if (semi_slou == 0)
+  b4:	80 91 62 00 	lds	r24, 0x0062
+  b8:	81 11       	cpse	r24, r1
+  ba:	02 c0       	rjmp	.+4      	; 0xc0 <__vector_1+0x36>
+ {
+	 asm("nop");
+  bc:	00 00       	nop
+  be:	07 c0       	rjmp	.+14     	; 0xce <__vector_1+0x44>
+ }
+ else
+ {
+	 TCNT2 = semi_slou;	              // При открытии семистра выставить значение в счетчик
+  c0:	84 bd       	out	0x24, r24	; 36
+     TCCR2  |= (1<<1)|(1<<2);         // Запустить Таймер2
+  c2:	85 b5       	in	r24, 0x25	; 37
+  c4:	86 60       	ori	r24, 0x06	; 6
+  c6:	85 bd       	out	0x25, r24	; 37
+     GICR   &=~  (1<<INT0);           // Запретитть прерывание INT0
+  c8:	8b b7       	in	r24, 0x3b	; 59
+  ca:	8f 7b       	andi	r24, 0xBF	; 191
+  cc:	8b bf       	out	0x3b, r24	; 59
+ } 	 
+}
+  ce:	ff 91       	pop	r31
+  d0:	ef 91       	pop	r30
+  d2:	bf 91       	pop	r27
+  d4:	af 91       	pop	r26
+  d6:	9f 91       	pop	r25
+  d8:	8f 91       	pop	r24
+  da:	7f 91       	pop	r23
+  dc:	6f 91       	pop	r22
+  de:	5f 91       	pop	r21
+  e0:	4f 91       	pop	r20
+  e2:	3f 91       	pop	r19
+  e4:	2f 91       	pop	r18
+  e6:	0f 90       	pop	r0
+  e8:	0f be       	out	0x3f, r0	; 63
+  ea:	0f 90       	pop	r0
+  ec:	1f 90       	pop	r1
+  ee:	18 95       	reti
+
+000000f0 <__vector_3>:
+
+ISR(TIMER2_COMP_vect)
+ {
+  f0:	1f 92       	push	r1
+  f2:	0f 92       	push	r0
+  f4:	0f b6       	in	r0, 0x3f	; 63
+  f6:	0f 92       	push	r0
+  f8:	11 24       	eor	r1, r1
+  fa:	8f 93       	push	r24
+	 
+	switch(CONTROLL_CLOSE)
+  fc:	80 91 60 00 	lds	r24, 0x0060
+ 100:	81 30       	cpi	r24, 0x01	; 1
+ 102:	19 f0       	breq	.+6      	; 0x10a <__vector_3+0x1a>
+ 104:	82 30       	cpi	r24, 0x02	; 2
+ 106:	51 f0       	breq	.+20     	; 0x11c <__vector_3+0x2c>
+ 108:	18 c0       	rjmp	.+48     	; 0x13a <__vector_3+0x4a>
+	{
+		case  1: 
+		           PORT_SEMISTOR  |= (1<<PIN_SEMISTOR);           // Открыть семистор
+ 10a:	93 9a       	sbi	0x12, 3	; 18
+		           CONTROLL_CLOSE ++;
+ 10c:	80 91 60 00 	lds	r24, 0x0060
+ 110:	8f 5f       	subi	r24, 0xFF	; 255
+ 112:	80 93 60 00 	sts	0x0060, r24
+		           TCNT2  = 0xff;       
+ 116:	8f ef       	ldi	r24, 0xFF	; 255
+ 118:	84 bd       	out	0x24, r24	; 36
+		break;
+ 11a:	0f c0       	rjmp	.+30     	; 0x13a <__vector_3+0x4a>
+		
+		case  2 :
+		           TCCR2 &=~ (1<<2);								 // Остановить Таймер2
+ 11c:	85 b5       	in	r24, 0x25	; 37
+ 11e:	8b 7f       	andi	r24, 0xFB	; 251
+ 120:	85 bd       	out	0x25, r24	; 37
+				   TCCR2 &=~ (1<<1);
+ 122:	85 b5       	in	r24, 0x25	; 37
+ 124:	8d 7f       	andi	r24, 0xFD	; 253
+ 126:	85 bd       	out	0x25, r24	; 37
+				   GICR   |=  (1<<INT0);						 	 // Разрешить прерывание INT0
+ 128:	8b b7       	in	r24, 0x3b	; 59
+ 12a:	80 64       	ori	r24, 0x40	; 64
+ 12c:	8b bf       	out	0x3b, r24	; 59
+                   PORT_SEMISTOR  &=~ (1<<PIN_SEMISTOR);             // Закрыть семистор
+ 12e:	93 98       	cbi	0x12, 3	; 18
+                   CONTROLL_CLOSE --;
+ 130:	80 91 60 00 	lds	r24, 0x0060
+ 134:	81 50       	subi	r24, 0x01	; 1
+ 136:	80 93 60 00 	sts	0x0060, r24
+				   
+				 
+		break;
+	 }
+ }	 
+ 13a:	8f 91       	pop	r24
+ 13c:	0f 90       	pop	r0
+ 13e:	0f be       	out	0x3f, r0	; 63
+ 140:	0f 90       	pop	r0
+ 142:	1f 90       	pop	r1
+ 144:	18 95       	reti
+
+00000146 <main>:
+
+
+
+int main(void)
+{
+		DDR__ZERRO_CROSS    &=~  (1<<INPUT_PIN_ZERRO_CROSS);     // Вход детектора нуля
+ 146:	8a 98       	cbi	0x11, 2	; 17
+		PORT__ZERRO_CROSS   &=~   (1<<INPUT_PIN_ZERRO_CROSS);    // Вход детектора нуля
+ 148:	92 98       	cbi	0x12, 2	; 18
+		
+		DDR_SEMISTOR       |=   (1<<PIN_SEMISTOR);				// Выход задержки семистра
+ 14a:	8b 9a       	sbi	0x11, 3	; 17
+		PORT_SEMISTOR      &=~  (1<<PIN_SEMISTOR);				// Выход задержки семистра
+ 14c:	93 98       	cbi	0x12, 3	; 18
+		DDRC  |= 0x00;
+ 14e:	84 b3       	in	r24, 0x14	; 20
+ 150:	84 bb       	out	0x14, r24	; 20
+		PORTC |= 0x00;
+ 152:	85 b3       	in	r24, 0x15	; 21
+ 154:	85 bb       	out	0x15, r24	; 21
+		
+		MCUCR  &=~ (1<<ISC00);    // Настройка прерываний INT
+ 156:	85 b7       	in	r24, 0x35	; 53
+ 158:	8e 7f       	andi	r24, 0xFE	; 254
+ 15a:	85 bf       	out	0x35, r24	; 53
+		MCUCR  |=  (1<<ISC01);    // Настройка прерываний INT
+ 15c:	85 b7       	in	r24, 0x35	; 53
+ 15e:	82 60       	ori	r24, 0x02	; 2
+ 160:	85 bf       	out	0x35, r24	; 53
+		GICR   |=  (1<<INT0);     // Настройка прерываний INT
+ 162:	8b b7       	in	r24, 0x3b	; 59
+ 164:	80 64       	ori	r24, 0x40	; 64
+ 166:	8b bf       	out	0x3b, r24	; 59
+		
+		DDRB = 0xFF;              // test
+ 168:	8f ef       	ldi	r24, 0xFF	; 255
+ 16a:	87 bb       	out	0x17, r24	; 23
+		TCCR2 |= (1<<WGM21) ;
+ 16c:	85 b5       	in	r24, 0x25	; 37
+ 16e:	88 60       	ori	r24, 0x08	; 8
+ 170:	85 bd       	out	0x25, r24	; 37
+		TIMSK |= (1<<OCIE2);
+ 172:	89 b7       	in	r24, 0x39	; 57
+ 174:	80 68       	ori	r24, 0x80	; 128
+ 176:	89 bf       	out	0x39, r24	; 57
+	
+ 
+ 
+   asm("sei");
+ 178:	78 94       	sei
+   while(1)
+    {
+        asm("nop");
+ 17a:	00 00       	nop
+ 17c:	fe cf       	rjmp	.-4      	; 0x17a <main+0x34>
+
+0000017e <_exit>:
+ 17e:	f8 94       	cli
+
+00000180 <__stop_program>:
+ 180:	ff cf       	rjmp	.-2      	; 0x180 <__stop_program>

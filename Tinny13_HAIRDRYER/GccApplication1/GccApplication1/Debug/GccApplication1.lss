@@ -1,0 +1,218 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000d4  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000003  00800060  00800060  00000148  2**0
+                  ALLOC
+  2 .comment      00000030  00000000  00000000  00000148  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000028  00000000  00000000  00000178  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   000000d3  00000000  00000000  000001a0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 0000007c  00000000  00000000  00000273  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   000000ef  00000000  00000000  000002ef  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000048  00000000  00000000  000003e0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    0000018b  00000000  00000000  00000428  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000049  00000000  00000000  000005b3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000018  00000000  00000000  000005fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	16 c0       	rjmp	.+44     	; 0x30 <__bad_interrupt>
+   4:	15 c0       	rjmp	.+42     	; 0x30 <__bad_interrupt>
+   6:	14 c0       	rjmp	.+40     	; 0x30 <__bad_interrupt>
+   8:	13 c0       	rjmp	.+38     	; 0x30 <__bad_interrupt>
+   a:	12 c0       	rjmp	.+36     	; 0x30 <__bad_interrupt>
+   c:	11 c0       	rjmp	.+34     	; 0x30 <__bad_interrupt>
+   e:	10 c0       	rjmp	.+32     	; 0x30 <__bad_interrupt>
+  10:	0f c0       	rjmp	.+30     	; 0x30 <__bad_interrupt>
+  12:	0f c0       	rjmp	.+30     	; 0x32 <__vector_9>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+
+0000001c <__do_clear_bss>:
+  1c:	20 e0       	ldi	r18, 0x00	; 0
+  1e:	a0 e6       	ldi	r26, 0x60	; 96
+  20:	b0 e0       	ldi	r27, 0x00	; 0
+  22:	01 c0       	rjmp	.+2      	; 0x26 <.do_clear_bss_start>
+
+00000024 <.do_clear_bss_loop>:
+  24:	1d 92       	st	X+, r1
+
+00000026 <.do_clear_bss_start>:
+  26:	a3 36       	cpi	r26, 0x63	; 99
+  28:	b2 07       	cpc	r27, r18
+  2a:	e1 f7       	brne	.-8      	; 0x24 <.do_clear_bss_loop>
+  2c:	1c d0       	rcall	.+56     	; 0x66 <main>
+  2e:	50 c0       	rjmp	.+160    	; 0xd0 <_exit>
+
+00000030 <__bad_interrupt>:
+  30:	e7 cf       	rjmp	.-50     	; 0x0 <__vectors>
+
+00000032 <__vector_9>:
+
+
+ char flag_culler = 0;
+ int ADC_value=0;
+ISR(ADC_vect)
+{
+  32:	1f 92       	push	r1
+  34:	0f 92       	push	r0
+  36:	0f b6       	in	r0, 0x3f	; 63
+  38:	0f 92       	push	r0
+  3a:	11 24       	eor	r1, r1
+  3c:	8f 93       	push	r24
+  3e:	9f 93       	push	r25
+	ADC_value = (ADC/4);
+  40:	84 b1       	in	r24, 0x04	; 4
+  42:	95 b1       	in	r25, 0x05	; 5
+  44:	96 95       	lsr	r25
+  46:	87 95       	ror	r24
+  48:	96 95       	lsr	r25
+  4a:	87 95       	ror	r24
+  4c:	90 93 61 00 	sts	0x0061, r25
+  50:	80 93 60 00 	sts	0x0060, r24
+	OCR0A = ADC_value;
+  54:	86 bf       	out	0x36, r24	; 54
+	ADCSRA |= (1<<ADSC);
+  56:	36 9a       	sbi	0x06, 6	; 6
+}
+  58:	9f 91       	pop	r25
+  5a:	8f 91       	pop	r24
+  5c:	0f 90       	pop	r0
+  5e:	0f be       	out	0x3f, r0	; 63
+  60:	0f 90       	pop	r0
+  62:	1f 90       	pop	r1
+  64:	18 95       	reti
+
+00000066 <main>:
+
+ 
+	
+	 
+	
+    DDRB  &=~  (1<<ENABLE_CULLER); // настройка порта для входа сигнала куллера
+  66:	b9 98       	cbi	0x17, 1	; 23
+    PORTB &=~  (1<<ENABLE_CULLER); // настройка порта для входа сигнала куллера
+  68:	c1 98       	cbi	0x18, 1	; 24
+	
+	DDRB  |= (1<<IRFZ44N);         // настройка порта ШИМ  куллера
+  6a:	b8 9a       	sbi	0x17, 0	; 23
+	PORTB &=~(1<<IRFZ44N);         // настройка порта ШИМ  куллера
+  6c:	c0 98       	cbi	0x18, 0	; 24
+	
+	
+	
+	//PB2 IN ADC 
+	DDRB  &=~ (1<<2);// ADC
+  6e:	ba 98       	cbi	0x17, 2	; 23
+    PORTB &=~ (1<<2);// ADC
+  70:	c2 98       	cbi	0x18, 2	; 24
+	
+	ADCSRA |= ((1<<ADEN)|(1<<ADIE)|(1<<ADPS2));
+  72:	86 b1       	in	r24, 0x06	; 6
+  74:	8c 68       	ori	r24, 0x8C	; 140
+  76:	86 b9       	out	0x06, r24	; 6
+	
+ 
+	ADMUX  &=~ (1<<REFS0);
+  78:	3e 98       	cbi	0x07, 6	; 7
+	ADMUX  |=  (1<<0);
+  7a:	38 9a       	sbi	0x07, 0	; 7
+	ADCSRA |= (1<<ADSC);
+  7c:	36 9a       	sbi	0x06, 6	; 6
+	 
+ 
+	
+
+	asm("sei");
+  7e:	78 94       	sei
+		
+		
+	if (((PINB&(1<<ENABLE_CULLER))==0) && (flag_culler == 0))
+    {
+		 
+		flag_culler = 1;
+  80:	91 e0       	ldi	r25, 0x01	; 1
+	
+    while(1)
+    {
+		
+		
+	if (((PINB&(1<<ENABLE_CULLER))==0) && (flag_culler == 0))
+  82:	b1 99       	sbic	0x16, 1	; 22
+  84:	0f c0       	rjmp	.+30     	; 0xa4 <__stack+0x5>
+  86:	80 91 62 00 	lds	r24, 0x0062
+  8a:	81 11       	cpse	r24, r1
+  8c:	0b c0       	rjmp	.+22     	; 0xa4 <__stack+0x5>
+    {
+		 
+		flag_culler = 1;
+  8e:	90 93 62 00 	sts	0x0062, r25
+		 TCCR0B |= (1 << CS01);
+  92:	83 b7       	in	r24, 0x33	; 51
+  94:	82 60       	ori	r24, 0x02	; 2
+  96:	83 bf       	out	0x33, r24	; 51
+		 TCCR0A |= (1 << WGM01) | (1 << WGM00);
+  98:	8f b5       	in	r24, 0x2f	; 47
+  9a:	83 60       	ori	r24, 0x03	; 3
+  9c:	8f bd       	out	0x2f, r24	; 47
+		 TCCR0A |= (1 << COM0A1);;
+  9e:	8f b5       	in	r24, 0x2f	; 47
+  a0:	80 68       	ori	r24, 0x80	; 128
+  a2:	8f bd       	out	0x2f, r24	; 47
+	}
+	 if ((!(PINB&(1<<ENABLE_CULLER))==0) && (flag_culler == 1))
+  a4:	b1 9b       	sbis	0x16, 1	; 22
+  a6:	ed cf       	rjmp	.-38     	; 0x82 <main+0x1c>
+  a8:	80 91 62 00 	lds	r24, 0x0062
+  ac:	81 30       	cpi	r24, 0x01	; 1
+  ae:	49 f7       	brne	.-46     	; 0x82 <main+0x1c>
+	 {
+		 
+	     
+		  TCCR0B &=~ (1 << CS01  );
+  b0:	83 b7       	in	r24, 0x33	; 51
+  b2:	8d 7f       	andi	r24, 0xFD	; 253
+  b4:	83 bf       	out	0x33, r24	; 51
+		  TCCR0A &=~ (1 << WGM01 );
+  b6:	8f b5       	in	r24, 0x2f	; 47
+  b8:	8d 7f       	andi	r24, 0xFD	; 253
+  ba:	8f bd       	out	0x2f, r24	; 47
+		  TCCR0A &=~ (1 << WGM00 );
+  bc:	8f b5       	in	r24, 0x2f	; 47
+  be:	8e 7f       	andi	r24, 0xFE	; 254
+  c0:	8f bd       	out	0x2f, r24	; 47
+		  TCCR0A &=~ (1 << COM0A1);
+  c2:	8f b5       	in	r24, 0x2f	; 47
+  c4:	8f 77       	andi	r24, 0x7F	; 127
+  c6:	8f bd       	out	0x2f, r24	; 47
+		 
+		 flag_culler = 0;
+  c8:	10 92 62 00 	sts	0x0062, r1
+		 
+		 PORTB &=~(1<<IRFZ44N); 
+  cc:	c0 98       	cbi	0x18, 0	; 24
+  ce:	d9 cf       	rjmp	.-78     	; 0x82 <main+0x1c>
+
+000000d0 <_exit>:
+  d0:	f8 94       	cli
+
+000000d2 <__stop_program>:
+  d2:	ff cf       	rjmp	.-2      	; 0xd2 <__stop_program>
